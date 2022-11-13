@@ -7,6 +7,8 @@ Copy LO_traps/user/forcing/traps0 into your instance of LO_user/forcing. This fo
 - **trapsfun.py:** This code has similar functionality to rivfun.py. It contains helper functions used to generate forcing for TRAPS. It also contains the most complex algorithms in the TRAPS module which take in TRAPS lat/lon coordinates and place the TRAPS on the nearest coastal grid cell.
 - **make_forcing_main.py:** This script should be used generate a rivers.nc forcing file like any other model run. However, it adds TRAPS to the forcing generation process, calling upon trapsfun.py. Users can choose to enable either tiny rivers, point sources, or both by toggling the logical switches on lines 25 and 26 of this file.
 
+![enablingtraps](https://user-images.githubusercontent.com/15829099/201500023-fe168b8a-84fd-485e-a1c8-9431ed8ee74d.png)
+
 ---
 
 ### LO_traps/user/pre
