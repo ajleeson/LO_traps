@@ -48,9 +48,6 @@ def monthly2daily(df):
 year0 = 1999
 year1 = 2017
 
-# define gridname
-gridname = 'cas6'
-
 # file with all traps names and ID numbers
 traps_info_fn = Ldir['data'] / 'traps' / 'SSM_source_info.xlsx'
 # location of historical data to process
@@ -223,7 +220,7 @@ if pd.isnull(DO_clim_df).sum().sum() != 0:
     print('Warning, there are missing oxygen values!')
 
 # save results
-clim_dir = Ldir['LOo'] / 'pre' / 'traps' / gridname / 'point_sources' /'Data_historical'
+clim_dir = Ldir['LOo'] / 'pre' / 'traps' / 'point_sources' /'Data_historical'
 flow_clim_df.to_pickle(clim_dir / ('CLIM_flow_' + str(year0) + '_' + str(year1) + '.p'))
 # salt_clim_df.to_pickle(clim_dir / ('CLIM_salt_' + str(year0) + '_' + str(year1) + '.p'))
 temp_clim_df.to_pickle(clim_dir / ('CLIM_temp_' + str(year0) + '_' + str(year1) + '.p'))
