@@ -19,3 +19,10 @@ Copy LO_traps/user/pre/traps into your instance of LO_user/pre. This directory c
 
 - **make_climatology_pointsources.py:** Creates climatology files for all point sources using Ecology's data in LO_traps/data/point_sources.
 - **make_climatology_tinyrivers.py**: Creates climatology files for all river mouths using Ecology's data in LO_traps/data/nonpoint_sources.
+
+To run the climatology scripts, go to ipython from LO_user/pre/traps and do
+
+```
+run make_climatology_tinyrivers.py
+run make_climatology_pointsources.py
+```
