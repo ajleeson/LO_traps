@@ -5,7 +5,6 @@ updated ROMS
 Test on mac in ipython:
 run make_forcing_main.py -g cas6 -r backfill -d 2020.01.01 -f traps0 -test True
 
-
 """
 
 from pathlib import Path
@@ -235,7 +234,7 @@ if enable_tinyrivers == True:
     gri_fn = Ldir['grid'] / 'triv_info.csv'
     gri_df = pd.read_csv(gri_fn, index_col='rname')
     if Ldir['testing']:
-        gri_df = gri_df.loc[['Kennedy_Schneider', 'North Olympic'],:]
+        gri_df = gri_df.loc[['Birch Bay', 'North Olympic'],:]
     NTRIV = len(gri_df)
 
     # get the flow, temperature, and nutrient data for these days
@@ -249,10 +248,6 @@ if enable_tinyrivers == True:
     # Add river coordinate
     triv_ds['river'] = (('river',), np.arange(NRIV+1,NRIV+NTRIV+1))
     triv_ds['river'].attrs['long_name'] = 'tiny river runoff identification number'
-
-    # Add river names
-    triv_ds['river_name'] = (('river',), list(gri_df.index))
-    triv_ds['river_name'].attrs['long_name'] = 'tiny river name'
 
     # Add Vshape
     vn = 'river_Vshape'
@@ -367,6 +362,16 @@ if enable_tinyrivers == True:
         triv_ds[vn].attrs['long_name'] = vinfo['long_name']
         triv_ds[vn].attrs['units'] = vinfo['units']
 
+    # Rename rivers that share name with WWTP. This code appends ' R' at the end of the river name
+    duplicates = ['Port Angeles', 'Port Townsend', 'Birch Bay', 'Port Gamble', 'Gig Harbor']
+    print(gri_df.index)
+    gri_df.index = np.where(gri_df.index.isin(duplicates), gri_df.index + ' R', gri_df.index)
+    print(gri_df.index) 
+
+    # Add river names
+    triv_ds['river_name'] = (('river',), list(gri_df.index))
+    triv_ds['river_name'].attrs['long_name'] = 'tiny river name'
+
 ###########################################################################################
 # FORCING FOR MARINE POINT SOURCES
 
@@ -401,6 +406,7 @@ if enable_pointsources == True:
     gri_df = pd.read_csv(gri_fn, index_col='rname')
     if Ldir['testing']:
         gri_df = gri_df.loc[['West Point', 'Birch Bay'],:]
+    gri_df = gri_df.drop('Birch Bay') # Remove the Birch Bay treatment plant
     NWWTP = len(gri_df)
 
     # get the flow, temperature, and nutrient data for these days
@@ -482,7 +488,7 @@ if enable_pointsources == True:
                     TS_mat[:, nn, rr] = qtbio_wwtp_df['temp'].values
                 rr += 1
         if np.isnan(TS_mat).any():
-            print('Error from traps00: nans in point source river_temp!')
+            print('Error from traps: nans in point source river_temp!')
             sys.exit()
         wwtp_ds[vn] = (dims, TS_mat)
         wwtp_ds[vn].attrs['long_name'] = vinfo['long_name']
@@ -501,7 +507,7 @@ if enable_pointsources == True:
                 B_mat[:, nn, rr] = qtbio_wwtp_df[var].values
             rr += 1
         if np.isnan(TS_mat).any():
-            print('Error from traps00: nans in tiny river bio!')
+            print('Error from traps: nans in tiny river bio!')
             sys.exit()
         wwtp_ds[vn] = (dims, B_mat)
         wwtp_ds[vn].attrs['long_name'] = vinfo['long_name']
@@ -522,7 +528,7 @@ if enable_pointsources == True:
                 B_mat[:, nn, rr] = rivfun.get_bio_vec(bvn, rn, yd_ind)
             rr += 1
         if np.isnan(B_mat).any():
-            print('Error from traps00: nans in B_mat for tiny river ' + vn)
+            print('Error from traps: nans in B_mat for tiny river ' + vn)
             sys.exit()
         wwtp_ds[vn] = (dims, B_mat)
         wwtp_ds[vn].attrs['long_name'] = vinfo['long_name']
@@ -532,8 +538,6 @@ if enable_pointsources == True:
 
 # combine all forcing datasets
 all_ds = xr.merge([LOriv_ds,triv_ds, wwtp_ds])
-# print(all_ds['river_name'])
-# print(all_ds['river_Chlo'][0][0])
 
 # Save to NetCDF
 all_ds.to_netcdf(out_fn)

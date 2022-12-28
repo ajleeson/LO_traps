@@ -16,6 +16,7 @@ from lo_tools import plotting_functions as pfun
 Ldir = ffun.intro() # this handles all the argument passing
 
 def in_domain(x, y, X, Y):
+    # Note: code borrowed from pgrid/carve_rivers.py
     # Utility function to make sure that a point (x, y) is
     # in a domain specified by vectors X and Y.
     # We actually require the point to be 'pad' in from the edge.
@@ -187,16 +188,12 @@ def get_cell_info_riv(I_ind,J_ind,X,Y,x,y,mask_rho):
 def get_nearest_coastal_cell_wwtp(sname,x,y,X,Y,mask_rho):
     """
     algorithm that calculates the nearest coastal grid cell (row/col)
-    to a rivermouth or point source,
+    to a point source,
     given its lat/lon coordinates, the lat/lon coordinates of the grid,
     and the mask of the rho-cells (to identify water vs land)
     """
-    # separation so it's easy to read print statements
-    # print('----------------------------------')
 
     if in_domain(x, y, X, Y):
-        # we only consider dischargers in the domain
-        # print('including ' + sname + ', Marine Point Source')
 
         # initialize a boolean to track whether a grid cell has been selected for point source
         ps_located = False
@@ -314,16 +311,12 @@ def get_nearest_coastal_cell_wwtp(sname,x,y,X,Y,mask_rho):
 def get_nearest_coastal_cell_riv(sname,x,y,X,Y,mask_rho):
     """
     algorithm that calculates the nearest coastal grid cell (row/col)
-    to a rivermouth or point source,
+    to a rivermouth,
     given its lat/lon coordinates, the lat/lon coordinates of the grid,
     and the mask of the rho-cells (to identify water vs land)
     """
-    # separation so it's easy to read print statements
-    # print('----------------------------------')
 
     if in_domain(x, y, X, Y):
-        # we only consider dischargers in the domain
-        # print('including ' + sname + ', River Mouth')
 
         # initialize a boolean to track whether a grid cell has been selected for point source
         rm_located = False
@@ -491,8 +484,6 @@ def traps_placement(source_type):
     elif source_type == 'riv':
         output_fn = 'triv_info.csv'
         inflow_type = 'River'
-    else:
-        False # TODO: throw error
 
     # get the grid data
     grid_fn = Ldir['grid'] / 'grid.nc'
@@ -537,12 +528,12 @@ def traps_placement(source_type):
                 checkname = sname.replace(' - 2','')
             # don't add rivers that already exist
             if SSM_repeats.str.contains(checkname).any():
-                # print('{} already in LiveOcean'.format(sname))
+                print('{} already in LiveOcean'.format(sname))
                 continue 
 
             # add river to LiveOcean if not already present
 
-            elif '1' in sname: # some large river mouths have two lat/lon coords
+            if '1' in sname: # some large river mouths have two lat/lon coords
                 x1 = latlon_df._get_value(source,'Lon')
                 y1 = latlon_df._get_value(source,'Lat')
                 # search for corresponding source containing '2' in its name
@@ -605,12 +596,11 @@ def traps_placement(source_type):
         # update name of index column
         rowcol_df.index.name = 'rname'
 
-    # TODO: save the dataframe! 
-    # & make sure to delete all rows that have nans!! 
-    # (check in the rivers file that I've done this correction)
-    # save the river info
+    # save the source info
     out_rfn = Ldir['grid'] / output_fn
     print('\nCreating ' + str(out_rfn))
+    # drop any sources that were outside of the domain, and had values padded with nans
+    rowcol_df = rowcol_df.dropna()
     rowcol_df.to_csv(out_rfn)
 
     plotting = False
@@ -618,8 +608,6 @@ def traps_placement(source_type):
     if plotting == True:
         # PLOTTING FOR TESTING ------------------------------------------------------------------------
         plon, plat = pfun.get_plon_plat(lon,lat)
-        pad = 0.05*(plat[-1,0]-plat[0,0])
-        ax_lims = (plon[0,0]-pad, plon[0,-1]+pad, plat[0,0]-pad, plat[-1,0]+pad)
 
         # make a version of z with nans where masked
         zm = z.copy()
@@ -736,7 +724,7 @@ def traps_placement(source_type):
             LOriv_col = LOrivs_df['col_py']
             LOrivs_lat = [Y[int(ind)] for ind in LOriv_row]
             LOrivs_lon = [X[int(ind)] for ind in LOriv_col]
-            ax.scatter(LOrivs_lon,LOrivs_lat, color='purple', marker='*', s=20, label='pre-existing LiveOcean River')
+            ax.scatter(LOrivs_lon,LOrivs_lat, color='darkorange', marker='*', s=20, label='pre-existing LiveOcean River')
 
         # plot tracks
         for i in range(len(ps_lon)):
@@ -744,11 +732,6 @@ def traps_placement(source_type):
                 ax.plot([SSMrivll_df['Lon'][i], ps_lon[i]],
                 [SSMrivll_df['Lat'][i], ps_lat[i]],
                 color='hotpink', linewidth=0.5)
-            # this doesn't work for point sources for some reason?
-            # elif inflow_type == 'Point Source':
-            #     ax.plot([latlon_df['Lon'][i], ps_lon[i]],
-            #     [latlon_df['Lat'][i], ps_lat[i]],
-            #     color='hotpink', linewidth=0.8)
 
         # print labels ---------------------------------------
         for i,sn in enumerate(snames):
@@ -759,7 +742,7 @@ def traps_placement(source_type):
             for i,rn in enumerate(LOrivns):
                 rn_lon = LOrivs_lon[i]
                 rn_lat = LOrivs_lat[i]+0.003
-                ax.text(rn_lon, rn_lat, rn, color = 'royalblue', fontsize=10, horizontalalignment='center')
+                ax.text(rn_lon, rn_lat, rn, color = 'darkorange', fontsize=10, horizontalalignment='center')
 
         # finalize plot
         ax.set_title('Algorithm Placement of {}s'.format(inflow_type), fontsize = 18)
