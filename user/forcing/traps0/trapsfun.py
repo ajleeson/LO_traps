@@ -528,7 +528,7 @@ def traps_placement(source_type):
                 checkname = sname.replace(' - 2','')
             # don't add rivers that already exist
             if SSM_repeats.str.contains(checkname).any():
-                print('{} already in LiveOcean'.format(sname))
+                # print('{} already in LiveOcean'.format(sname))
                 continue 
 
             # add river to LiveOcean if not already present
@@ -764,6 +764,9 @@ def get_qtbio(gri_df, dt_ind, yd_ind, Ldir, traps_type):
     CNO3_df  = pd.read_pickle(Ldir['CNO3_'+traps_type+'_fn'])
     CTalk_df = pd.read_pickle(Ldir['CTalk_'+traps_type+'_fn'])
     CTIC_df  = pd.read_pickle(Ldir['CTIC_'+traps_type+'_fn'])
+
+    # year day index starts from 1. Convert to start from 0 to work with python
+    yd_ind = yd_ind - 1
 
     # initialize output dict
     qtbio_df_dict = dict()
