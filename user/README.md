@@ -9,7 +9,7 @@ Copy LO_traps/user/forcing/traps0 into your instance of LO_user/forcing. This fo
 
 ![enablingtraps](https://user-images.githubusercontent.com/15829099/209865242-878e6657-cbc6-4bac-b583-19273b5fcf3a.png)
 
-*NOTE:* If you enable point sources, then you must enable on LwSrc in the BLANK.in file. LuvSrc will already be enabled by default, because rivers introduce horizontal (or u- v-) momentum to the system. Point sources discharge vertically, so LwSrc must be set to 'T' true. Example screenshot below.
+*NOTE:* If you enable point sources, then you must also enable LwSrc in the corresponding BLANK.in file. LuvSrc will already be enabled by default because rivers introduce horizontal (or u- v-) momentum to the system. Point sources discharge vertically (w-momentum), so LwSrc must be set to 'T' true. Example screenshot below.
 
  ![enable_lwsrc](https://user-images.githubusercontent.com/15829099/209903422-4f3f238b-68f8-44e4-b31d-2448cc5d9053.png)
 
