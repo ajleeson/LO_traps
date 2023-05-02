@@ -12,12 +12,12 @@ This page provides an in-depth explanation of how functions integrate TRAPS into
 ---
 ## trapsfun.py
 
-This section describes the helper functions defined in the `trapsfun.py` script. These functions are used to determine where in a model domain TRAPS should be located given their lat/lon coordinates.
+This section describes the helper functions defined in the `trapsfun.py` script. These functions determine where in a model domain TRAPS should be located given their lat/lon coordinates.
 
 ### Main Script: `traps_placement`
 
 <details><summary><strong>Summary</strong></summary>
-This is the main function that places TRAPS in the model domain. The script make_forcing_main calls traps_placement, twice. Once with an input of 'riv' for tiny rivers, and a second time with an input of 'wwtp' for point sources. The script reads lat/lon coordinates of TRAPS in LO_data/traps/SSM_source_info.xlsx, then decides where to place the TRAPS in the model domain.
+This is the main function that places TRAPS in the model domain. The script make_forcing_main calls traps_placement, twice: once with an input of 'riv' for tiny rivers, and a second time with an input of 'wwtp' for point sources. The script reads lat/lon coordinates of TRAPS in LO_data/traps/SSM_source_info.xlsx, then decides where to place the TRAPS in the model domain.
 
 This function does not output anything, but it does save .csv files with TRAPS location indices in LO_data/grids/[gridname]. In the same folder, this function also saves figures depicting the location of the placed TRAPS.
 
