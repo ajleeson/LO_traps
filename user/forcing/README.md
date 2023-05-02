@@ -1,16 +1,50 @@
 # LO_traps/user/forcing
 
-This page provides an in-depth explanation of how TRAPS get integrated into the model domain.
+This page provides an in-depth explanation of how functions integrate TRAPS into the model domain.
+
+---
+## make_forcing_main.py
+
+<!-- This script is based off of Parker MacCready's make_forcing_main.py script used in LiveOcean. I have modified it to incoroporate TRAPS. This README only describes portions of the script that are relevant to the addition of TRAPS. -->
+
+------- Work in progress. Check back later for updates -------
 
 ---
 ## trapsfun.py
 
 This section describes the helper functions defined in the `trapsfun.py` script. These functions are used to determine where in a model domain TRAPS should be located given their lat/lon coordinates.
 
-### Main Script:
+### Main Script: `traps_placement`
 
-<details><summary><code><strong>traps_placement</strong></code></summary>
----------------------------add description here!!!
+<details><summary><strong>Summary</strong></summary>
+This is the main function that places TRAPS in the model domain. The script make_forcing_main calls traps_placement, twice. Once with an input of 'riv' for tiny rivers, and a second time with an input of 'wwtp' for point sources. The script reads lat/lon coordinates of TRAPS in LO_data/traps/SSM_source_info.xlsx, then decides where to place the TRAPS in the model domain.
+
+This function does not output anything, but it does save .csv files with TRAPS location indices in LO_data/grids/[gridname]. In the same folder, this function also saves figures depicting the location of the placed TRAPS.
+
+The following subsections provide more details about the placement algorithm and plotting script.
+
+</details>
+
+<details><summary><strong>Algorithm</strong></summary>
+
+*Tiny Rivers*
+
+1. For each river listed in SSM_source_info.xlsx, this function first checks if the river is already pre-existing in LiveOcean. If it is pre-existing, then this function does nothing and skips to the next river. If the river is not pre-existing in LiveOcean, then this function proceeds to the next step.
+2. Several larger rivers in the SSM discharge to two grid cells. This script consolidates these rivers to discharge from just one grid cell. To do so, the function checks whether the river name has the format '[rivername] -1' or '[rivername] -2', indicating that it is a two-cell river. If so, then the function averages the lat/lon coordinates of '[rivername] -1' and '[rivername] -2' to obtain a single set of lat/lon coordinates.
+3. This function then feeds the lat/lon coordinates of each river ainto `get_nearest_coastal_cell_riv` to obtain i,j-indices and direction of the placed river (See the "Tiny River Handling" section below for more details).
+4. Finally, this function saves river information in LO_data/grids/[gridname]/triv_info.csv.
+
+*Point Sources*
+
+There are no pre-existing rivers in LiveOcean, nor are there any point sources that discharge to multiple grid cells in the SSM. Thus, point sources are easier to handle than tiny rivers.
+
+1. First, the functions feeds each point source listed in SSM_source_info.xlsx into `get_nearest_coastal_cell_wwtp` to obtain the i,j-indices of the places source (See the "Point Source Handling" section below for more details).
+2. Then, this function saves point source information in LO_data/grids/[gridname]/wwtp_info.csv.
+
+</details>
+
+<details><summary><strong>Plotting</strong></summary>
+------- Work in progress. Check back later for updates -------
 </details><br>
 
 ### Tiny River Handling
@@ -78,4 +112,32 @@ This function only needs to search for the nearest coastal grid cell if the star
 A grid cell of interest is determined in `get_nearest_coatal_cell_wwtp` before being fed as an input to this function.
 
 This function is the point source equivalent of `get_cell_info_riv`, except it is much simpler. In general, point sources are easier to handle than tiny rivers because point sources can be located on an water cell (including in open water), whereas rivers must be located on a land-adjacent water cell. Furthermore, rivers need an associated flow direction, but point sources do not. Thus, this function only needs to check whether the grid cell of interest is a water cell. If so, the function returns the i,j-indices of the grid cell of interest as well as the distance from the center of the grid cell to the point source. If the grid cell of interest is not a water cell, then nothing is returned.
+</details><br>
+
+### Other Helper Functions
+
+------- Work in progress. Check back later for updates -------
+
+<!-- <details><summary><code><strong>in_domain</strong></code></summary>
+-----------------------description!
 </details>
+
+<details><summary><code><strong>cell_in_domain</strong></code></summary>
+-----------------------description!
+</details>
+
+<details><summary><code><strong>get_qt_bio</strong></code></summary>
+-----------------------description!
+</details>
+
+<details><summary><code><strong>combine_adjacent</strong></code></summary>
+-----------------------description!
+</details>
+
+<details><summary><code><strong>weighted_average</strong></code></summary>
+-----------------------description!
+</details>
+
+<details><summary><code><strong>LO2SSM_name</strong></code></summary>
+-----------------------description!
+</details> -->
