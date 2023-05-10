@@ -25,6 +25,10 @@ The **traps1** forcing folder generates biogeochemistry forcing for pre-existing
 
 Given the issues with vertical sources, the **traps2** forcing folder can be used to add point sources as horizontal sources. Note that this forcing folder also uses Ecology's biogeochemistry for pre-existing LiveOcean rivers.
 
+*2023.05.10 Update*
+
+I have added **traps3** which, similar to traps2, treats vertical sources like horizontal sources. The only difference is that nitrate/nitrite and ammonium is set to zero for WWTPs.
+
 ---
 
 ## LO_traps/user/pre
