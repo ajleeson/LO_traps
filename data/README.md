@@ -1,5 +1,7 @@
 # LO_traps/data
 
+----------------TODO: tell users where to get files on Perigee (and put those files on perigee!!)---------------
+
 Copy LO_traps/data/traps into your instance of LO_data on your local computer and on perigee. This directory contains four files/folders.
 
 - **LiveOcean_SSM_rivers.xlsx:** Excel sheet with list of duplicate rivers in LiveOcean and the Salish Sea Model. When you create TRAPS climatology and when you generate forcing, LO_traps/user/pre/make_climatology and the trapsfun.py script in LO_traps/user/forcing will look at this excel sheet to determine which rivers to omit from LiveOcean. This ensures that TRAPS does not add duplicate rivers to LiveOcean.

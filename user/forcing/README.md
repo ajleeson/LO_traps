@@ -44,14 +44,16 @@ There are no pre-existing rivers in LiveOcean, nor are there any point sources t
 </details>
 
 <details><summary><strong>Plotting</strong></summary>
-------- Work in progress. Check back later for updates -------
 
-triv_loc.png
-wwtp_loc.png
+In addition to .csv files with TRAPS location indices, trapsfun.py also generates two figures:
 
+**triv_loc.png**
 <p style="text-align:center;"><img src="https://user-images.githubusercontent.com/15829099/236656005-b332492b-e35f-421f-9053-c0c6344e3a2d.png" width="800"/><br></p>
 
+**wwtp_loc.png**
 <p style="text-align:center;"><img src="https://user-images.githubusercontent.com/15829099/236656004-009c565f-d0a1-4c6b-ac13-fefb63f56988.png" width="800"/><br></p>
+
+These figures shows the resulting locations of river mouths and WWTPs.
 
 </details><br>
 
