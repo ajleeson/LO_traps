@@ -1,6 +1,6 @@
 # LO_traps/user
 
-More details of the scripts in each subfolder can be found in their respective READMEs.
+Each subfolder listed below contains a more detailed README with descriptions for every funtion in the folder.
 
 **LO_traps/user/forcing**
 
