@@ -17,6 +17,15 @@ There are three main climatology scripts:
 
 These scripts generate climatology pickle files in LO_output/pre/traps/[source type]/lo_base/Data_historical.
 
+Climatologies are generated for the following variables:
+- flow (TRAPS only)
+- temperature (TRAPS only)
+- DO
+- NO3
+- NH4
+- TIC
+- TAlk
+
 </details>
 
 <details><summary><strong>Algorithm</strong></summary>
