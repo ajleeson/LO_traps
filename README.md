@@ -13,7 +13,7 @@ All data and source locations have been downloaded from Washington State Departm
 ---
 ## Getting set up
 
-<details><summary><strong>Where to put which Files</strong></summary>
+<details><summary><strong>Where to put which files</strong></summary>
 
 To enable TRAPS, you will need to move the files in LO_traps to the correct directory within the LO system (i.e your LO_user).
 
@@ -137,6 +137,18 @@ The 4.43 mmol/m3 NO4 concentration is implemented as an ```if``` statement in th
 <details><summary><strong>WWTP open and close dates</strong></summary>
 
 LO_data/traps/wwtp_open_close_date.xlsx is a user-modifiable sheet with the open and close dates of the WWTPs (with a yearly resolution). The information in this excel sheet is read by the LO_traps/user/forcing/trapsV00/make_wwtp_forcing.py script and turned into a series of ``if`` statements. When the user generates forcing for a year in which a WWTP is closed, then the scripts will still add the WWTP to the model grid. However, the script will set the discharge rate to be 0 m3/s.
+
+</details>
+
+<details><summary><strong>Shifted rivers in Hood Canal</strong></summary>
+
+Several Hood Canal rivers in Ecology's data, like Union River, get their flow data from the Big Beef Creek USGS river gage. However, the Big Beef Creek gage became inactive in mid-2012. As a result, from mid-2012 through the end of 2014, river data for these Hood Canal rivers are a copy of prior year data. These copied data also appear to be shifted by 3 months.
+
+To prevent river climatologies from being biased by these shifted, copied data, I have removed data from mid-2012 through the end of 2014 for the affected Hood Canal rivers. This "data cropping" is implemented in LO_traps/user/pre/traps/make_climatology_tinyrivs.py.
+
+An example hydrograph for Union River is shown below before and after the data were cropped.
+
+![union-river-hydrograph](https://github.com/ajleeson/LO_user/assets/15829099/5381807c-d46b-4487-96e4-98724981f95e)
 
 </details>
 
