@@ -30,7 +30,7 @@ reload(triv)
 reload(wwtp)
 
 #################################################################################
-#                     Swith to enable/disable TRAPS                             #
+#                     Switch to enable/disable TRAPS                            #
 #################################################################################
 
 # LOGICAL SWITCH TO ENABLE OR DISABLE TINY RIVERS OR WWTPS
