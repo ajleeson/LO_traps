@@ -1,10 +1,48 @@
 # LO_traps/user/pre/traps
 
-## traps_placement.py
+This folder contains the scripts that generate climatologies for TRAPS and that map TRAPS to the model grid. Details of each can be found below.
 
-This section describes the `traps_placement.py` script. `traps_placement.py` and its helper functions in `traps_helper.py` determine where in a model domain TRAPS should be located given their lat/lon coordinates.
+---
+## make_climatology scripts
 
-### `traps_placement`
+The climatology scripts condense the 1999-2017 Ecology timeseries data into yearly climatologies for each source. This section describes how these scripts work.
+
+<details><summary><strong>Summary</strong></summary>
+
+There are three main climatology scripts:
+
+- `make_climatology_pointsources.py`: Creates climatology files for all point sources using Ecology's data in LO_traps/data/all_point_source_data.nc
+- `make_climatology_tinyrivers.py`: Creates climatology files for river mouths using Ecology's data in LO_traps/data/all_nonpoint_source_data.nc. This script does not generate climatology for pre-existing rivers in LiveOcean.
+- `make_climatology_LOrivbio.py`: Creates biogeochemistry climatology files for all pre-existing LiveOcean rivers for which Ecology has data in LO_traps/data/all_nonpoint_source_data.nc. This script does not generate climatology for tiny rivers, nor does it generate flowrate or temperature climatology.
+
+These scripts generate climatology pickle files in LO_output/pre/traps/[source type]/lo_base/Data_historical.
+
+</details>
+
+<details><summary><strong>Algorithm</strong></summary>
+
+The structure of these scripts are all similar, so they will be explained generally. There are a few nuances in `make_climatology_tinyrivers.py` which are discussed explicitly.
+
+1. First, raw data are read from LO_data/traps/all_nonpoint_source_data.nc and LO_data/traps/all_point_source_data.nc. 
+
+>>> **River notes:** For rivers, the script also reads the list of pre-existing LO rivers from LO_data/traps/LiveOcean_SSM_rivers.xlsx. The pre-existing rivers are omitted from  tinyriver climatology. The non-pre-existing rivers are omitted from LOrivbio climatology.
+
+>>> **Tiny river notes:** In the raw Ecology data, there are several tiny rivers with unrealistic biogeochemistry parameters (i.e. zero DO, negative TIC, etc.). These "weird rivers" are temporarily removed from climatology generation. They are handled separately in Step 4.
+
+2. Then, the script creates empty dataframes for DO, discharge, temperature, NO3, NH4, TIC, and TAlk. For every source, the script then fills these dataframes with the average yearly climatology of the full 1999-2017 timeseries from Ecology. Essentially, climatologies are the "average year" of each source. The script also calculates the standard deviations of these climatologies.
+
+3. Next, the script plots the climatology summary statistics. For every state variable, the script calculates and plots the average climatology profile, the standard deviation, and the min and max climatology values. This plot is saved in LO_output/pre/traps/[source type]/lo_base/Data_historical. An example figure is shown below for tiny rivers.<p style="text-align:center;"><img src="https://github.com/ajleeson/LO_user/assets/15829099/43092aad-d254-4e28-b63f-68c84103f53a" width="800"/><br></p>
+
+4. **Only applies to tiny rivers.** The script then overwrites the biogeochemistry climatologies for "weird rivers" with the average climatology of other rivers calculated in Step 3.
+
+5. Finally, the script saves climatology dataframes as pickle files.
+
+</details>
+
+---
+## traps_placement.py & traps_helper.py
+
+This section describes the `traps_placement.py` script. The `traps_placement.py` script and its helper functions in `traps_helper.py` determine where in a model domain TRAPS should be located given their lat/lon coordinates.
 
 <details><summary><strong>Summary</strong></summary>
 This is the main function that places TRAPS in the model domain. This script runs the placement function twice: once with an input of 'riv' for tiny rivers, and a second time with an input of 'wwtp' for point sources. The script reads lat/lon coordinates of TRAPS, then decides where to place the TRAPS in the model domain.
