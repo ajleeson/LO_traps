@@ -36,7 +36,7 @@ On Perigee, copy the /data1/auroral/LO_data/traps folder into LO_data on your co
 
 Once this is complete you should have an LO_data/traps folder with the following files:
 - **LiveOcean_SSM_rivers.xlsx:** Excel sheet with list of duplicate rivers in LiveOcean and the Salish Sea Model. When you create TRAPS climatology and when you generate forcing, the scripts will look at this excel sheet to determine which rivers to omit from LiveOcean. This ensures that TRAPS does not add duplicate rivers to LiveOcean.
-- **wwtp_open_close_date.xlsx:** Excel sheet with a list of WWTPs and the year that they closed or opened.
+- **wwtp_open_close_dates.xlsx:** Excel sheet with a list of WWTPs and the year that they closed or opened.
 - **all_nonpoint_source_data.nc**: Ecology's timeseries data of state variables and lat/lon coordinates for all river mouths. Used in LO_traps/user/pre/traps to generate climatology files.
 - **all_point_source_data.nc:** Ecology's timeseries data of state variables and lat/lon coordinates for all point sources. Used in LO_traps/user/pre/traps to generate climatology files.
 
@@ -134,12 +134,6 @@ The 4.43 mmol/m3 NO4 concentration is implemented as an ```if``` statement in th
 
 </details>
 
-<details><summary><strong>WWTP open and close dates</strong></summary>
-
-LO_data/traps/wwtp_open_close_date.xlsx is a user-modifiable sheet with the open and close dates of the WWTPs (with a yearly resolution). The information in this excel sheet is read by the LO_traps/user/forcing/trapsV00/make_wwtp_forcing.py script and turned into a series of ``if`` statements. When the user generates forcing for a year in which a WWTP is closed, then the scripts will still add the WWTP to the model grid. However, the script will set the discharge rate to be 0 m3/s.
-
-</details>
-
 <details><summary><strong>Shifted rivers in Hood Canal</strong></summary>
 
 Several Hood Canal rivers in Ecology's data, like Union River, get their flow data from the Big Beef Creek USGS river gage. However, the Big Beef Creek gage became inactive in mid-2012. As a result, from mid-2012 through the end of 2014, river data for these Hood Canal rivers are a copy of prior year data. These copied data also appear to be shifted by 3 months.
@@ -149,6 +143,20 @@ To prevent river climatologies from being biased by these shifted, copied data, 
 An example hydrograph for Union River is shown below before and after the data were cropped.
 
 ![union-river-hydrograph](https://github.com/ajleeson/LO_user/assets/15829099/5381807c-d46b-4487-96e4-98724981f95e)
+
+</details>
+
+<details><summary><strong>WWTP open and close dates</strong></summary>
+
+LO_data/traps/wwtp_open_close_dates.xlsx is a user-modifiable sheet with the open and close dates of the WWTPs (with a yearly resolution). The information in this excel sheet is read by the LO_traps/user/forcing/trapsV00/make_wwtp_forcing.py script and turned into a series of ``if`` statements. When the user generates forcing for a year in which a WWTP is closed, then the scripts will still add the WWTP to the model grid. However, the script will set the discharge rate to be 0 m3/s.
+
+</details>
+
+<details><summary><strong>Overlapping sources and the Lake Stevens WWTPs</strong></summary>
+
+For the cas7 grid, several pairs of tiny river and pairs of WWTPs get mapped to the same grid cell (despite having different lat/lon coordinates). These pairs of sources are called "overlapping" sources. To prevent ROMS from getting confused, the forcing scripts consolidate overlapping sources into a single source. The scripts sum the flowrates of both sources, and calculates a weighted average for the other state variables (e.g. temperature) based on flowrate. Even if users are not using the cas7 grid, the TRAPS forcing script will identify and consolidate overlapping sources. Note that this script can only consolidate a pair of overlapping tiny rivers, or a pair of overlapping WWTPs. The script is not able to identify whether a tiny river and WWTP are overlapping. Luckily, this scenario does not occur in the cas7 grid.
+
+The Lake Stevens 001 and Lake Stevens 002 WWTPs overlap on the cas7 grid. However, these WWTPs are never open concurrently-- Lake Stevens 002 opens after Lake Stevens 001 closes. Thus, there is a conditional statement in the LO_traps/user/forcing/make_wwtp_forcing.py script that <i>un-</i>consolidates these WWTPs.
 
 </details>
 
