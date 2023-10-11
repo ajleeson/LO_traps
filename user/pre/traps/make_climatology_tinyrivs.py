@@ -67,8 +67,9 @@ repeatrivs_df = pd.read_excel(repeatrivs_fn)
 SSM_repeats = repeatrivs_df['SSM_rname'].tolist()
 # remove nans
 SSM_repeats = [x for x in SSM_repeats if str(x) != 'nan']
-# remove repeat river names from list of river names
-trivnames = [river for river in trivnames_all if river not in SSM_repeats]
+# remove repeat river names from list of river names & remove Willamette River
+SSM_repeats_and_Willamette = SSM_repeats + ['Willamette R']
+trivnames = [river for river in trivnames_all if river not in SSM_repeats_and_Willamette]
 
 # # just test 5 trivs for now -------------------------------------------------
 # trivnames = trivnames[28:33]
