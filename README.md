@@ -160,6 +160,16 @@ The Lake Stevens 001 and Lake Stevens 002 WWTPs overlap on the cas7 grid. Howeve
 
 </details>
 
+<details><summary><strong>Willamette River</strong></summary>
+
+Willamette River is included in the Ecology data, and it is not explicitly a duplicate pre-existing LiveOcean river. However, Willamette River discharges into the Columbia River. The Columbia River was pre-existing to LiveOcean, and its USGS gauge is downstream of the Willamette River (meaning that the pre-existing Columbia River already includes contribution from the Willamette). Therefore, the TRAPS code needs to remove the Willamette River from being incorporated into LiveOcean.
+
+This exception is handled in LO_user/pre/traps/make_climatology_tinyrivs.py:
+
+![Willamette](https://github.com/ajleeson/LO_user/assets/15829099/8271fb86-d892-4148-9cc7-8b0bfd2cdb75)
+
+</details>
+
 ---
 ## Update Notes
 
