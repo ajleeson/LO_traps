@@ -35,7 +35,7 @@ The scripts have been separated to improve readability. Now, `make_forcing_main.
 *Notes for make_LOriv_forcing.py*
 
 - The flow and temperature data for all pre-existing LO rivers is unchanged compared to prior versions of LO.
-- There are several pre-exsiting LO rivers for which Ecology also has data. The biogeochemistry variables for these duplicate pre-existing rivers are thus filled using the TRAPS climatology based on Ecology's data (LO_user/pre/traps/make_climatology_LOrivbio.py).
+- There are several pre-exsiting LO rivers for which Ecology also has data. The biogeochemistry variables for these duplicate pre-existing rivers are thus filled using the TRAPS climatology based on Ecology's data (LO_user/pre/trapsV00/make_climatology_LOrivbio.py).
 - Some duplicate rivers have weird values in Ecology's dataset (i.e. zero DO, negative TIC, etc.). The algorithm opts to **not** use Ecology's data for these weird rivers, and instead leave these pre-existing rivers unchanged.
 - Fraser river NH4 is set to a constant 4.43 mmol/m3 concentration, as recommended by Susan Allen.
 
@@ -49,7 +49,7 @@ The scripts have been separated to improve readability. Now, `make_forcing_main.
 
 *WWTP open and close dates*
 
-- LO_data/traps/wwtp_open_close_dates.xlsx contains a list of WWTPs and their open/close years
+- LO_data/trapsV00/wwtp_open_close_dates.xlsx contains a list of WWTPs and their open/close years
 - The `make_wwtp_forcing.py` script checks this file. If a WWTP is closed for the year in which forcing is being generated, then the discharge rate is padded with zeros
 
 </details>

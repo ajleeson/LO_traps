@@ -8,8 +8,8 @@ This folder is used to generate river and TRAPS forcing.
 
 Copy LO_traps/user/forcing/trapsV00 into your instance of LO_user/forcing.
 
-### LO_traps/user/pre/traps
+### LO_traps/user/pre/trapsV00
 
 This folder is used to generate TRAPS climatologies and to place the TRAPS onto your model grid.
 
-Copy LO_traps/user/pre/traps into your instance of LO_user/pre.
+Copy LO_traps/user/pre/trapsV00 into your instance of LO_user/pre.
