@@ -1,3 +1,8 @@
+
+### 2024.01.03 UPDATE
+**As of today, the latest version of TRAPS will be maintained in the [LO repo](https://github.com/parkermac/LO/tree/main/traps_notes). This LO_traps repo is now obsolete.**
+
+
 # LO_traps
  Module to add tiny rivers and point sources (TRAPS) to LiveOcean.
 
